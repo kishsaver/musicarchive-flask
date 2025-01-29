@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+</head>
+<body>
+    <h2>ログイン</h2>
+
+    <!-- Flaskでのフラッシュメッセージを赤or青で表示(error、success)-->
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with success_messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if success_messages %}
+            {% for s_msg in success_messages %}
+                <p style="color: blue;">{{ s_msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('auth.index') }}">
+        ユーザID:<br>
+        <input type="text" name="user_id" required><br><br>
+
+        パスワード:<br>
+        <input type="password" name="password" required><br><br>
+
+        <button type="submit">ログイン</button><br><br>
+        <!-- ボタン形式でのリンク -->
+        <button type="button" onclick="location.href='{{ url_for('auth.register') }}'">
+            ユーザ登録はこちら
+        </button>
+    </form>
+</body>
+</html>

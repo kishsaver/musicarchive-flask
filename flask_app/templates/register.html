@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ情報の登録画面</title>
+</head>
+<body>
+    <h2>新規ユーザの登録</h2>
+
+    <!-- Flaskでのフラッシュメッセージを赤or青で表示(error、success)-->
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with success_messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if success_messages %}
+            {% for s_msg in success_messages %}
+                <p style="color: blue;">{{ s_msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('auth.register') }}">
+        ユーザID（半角英数）：<br>
+        <input type="text" name="user_id" required><br><br>
+
+        パスワード（半角英数）：<br>
+        <input type="password" name="password" required><br><br>
+
+        パスワード（再入力）：<br>
+        <input type="password" name="confirm_password" required><br><br>
+
+        <button type="submit" style="margin-bottom: 10px;">登録</button><br>
+
+        <button type="button" onclick="location.href='{{ url_for('auth.index') }}'">
+            ログイン画面に戻る
+        </button>
+    </form>
+</body>
+</html>

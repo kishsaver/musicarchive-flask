@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>登録した楽曲の一覧</title>
+    <style>
+        /* テーブル全体のデザイン */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px 12px;
+        }
+        th {
+            background-color: #e3f0fb;
+            font-weight: bold;
+        }
+        /* ボタン周りの調整 */
+        .button-group {
+            margin: 20px 0;
+        }
+    </style>
+    <script>
+        function confirmDelete() {
+            return confirm('選択した楽曲を削除してもよろしいですか？');
+        }
+    </script>
+</head>
+<body>
+    <h1>登録した楽曲の一覧</h1>
+    
+    <div style="max-width: 800px; margin: 0 auto;">
+    <!-- Flaskでのフラッシュメッセージを赤or青で表示(error、success)-->
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with success_messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if success_messages %}
+            {% for s_msg in success_messages %}
+                <p style="color: blue;">{{ s_msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+        <form method="POST" action="{{ url_for('music.list') }}" onsubmit="return confirmDelete();">
+            <p>{{ login_user_id }}さんがこれまで登録した楽曲</p>
+
+            {% if musics %}
+                <table>
+                    <tr>
+                        <th>選択</th>
+                        <th>楽曲名</th>
+                        <th>アーティスト名</th>
+                        <th>適したシーン</th>
+                    </tr>
+                    {% for music in musics %}
+                    <tr>
+                        <td align="center">
+                            <input type="radio" name="music_id" value="{{ music.id }}">
+                        </td>
+                        <td>{{ music.song_name }}</td>
+                        <td>{{ music.artist_name }}</td>
+                        <td>{{ music.category }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <div class="button-group">
+                    <button type="submit" >
+                        選択した項目を削除
+                    </button>
+                </div>
+            {% else %}
+                <p>楽曲が1件も登録されていません</p>
+            {% endif %}
+
+            <div class="button-group">
+                <button type="button" onclick="location.href='{{ url_for('music.recorder') }}'">
+                    楽曲の登録に戻る
+                </button>
+                <button type="button" onclick="location.href='{{ url_for('auth.logout') }}'">
+                    ログアウト
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

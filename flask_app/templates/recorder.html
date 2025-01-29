@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>楽曲の登録</title>
+</head>
+<body>
+    <h2>楽曲の登録</h2>
+
+    <!-- Flaskでのフラッシュメッセージを赤or青で表示(error、success)-->
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% with success_messages = get_flashed_messages(category_filter=["success"]) %}
+        {% if success_messages %}
+            {% for s_msg in success_messages %}
+                <p style="color: blue;">{{ s_msg }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- action先はmusic.recorderエンドポイントに向ける -->
+    <form method="POST" action="{{ url_for('music.recorder') }}">
+
+        <!-- PHP版にある「これまでに登録した楽曲を一覧表示する」ボタン相当 -->
+        <button type="button" onclick="location.href='{{ url_for('music.list') }}'">
+            これまでに登録した楽曲を一覧表示する
+        </button><br><br>
+
+        楽曲名:<br>
+        <input type="text" name="song_name" required><br><br>
+
+        アーティスト名:<br>
+        <input type="text" name="artist_name" required><br><br>
+
+        楽曲の用途:<br>
+        <!-- PHP版の値とラベルを踏襲 -->
+        <input type="radio" name="category" value="drive" checked="checked">ドライブ<br>
+        <input type="radio" name="category" value="karaoke">カラオケ<br>
+        <input type="radio" name="category" value="commute">通勤<br>
+        <input type="radio" name="category" value="work">仕事<br><br>
+
+        <button type="submit">登録</button><br><br>
+
+        <button type="button" onclick="location.href='{{ url_for('auth.logout') }}'">
+            ログアウト
+        </button>
+    </form>
+</body>
+</html>
