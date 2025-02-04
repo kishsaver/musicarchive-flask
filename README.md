@@ -3,46 +3,44 @@
 
 musicarchive flask版  
 
-DBはSQLite3を利用
+DBはSQLite3を利用  
 
-<<<<<<< HEAD
-- ライブラリのインストール
-`git clone`したリポジトリ内で`pip install -r requirements.txt`
+- ライブラリのインストール  
+`git clone`したリポジトリ内で`pip install -r requirements.txt  
 
-- Flaskアプリケーションの実行
-=======
-`pip install -r requirements.txt`
+- Flaskアプリケーションの実行   
+
+`pip install -r requirements.txt`  
 
 でライブラリを入れたあと、
 
->>>>>>> fd4973d7257898389fd4e13ab423f24030c701eb
 `python3 -m flask_app.main`
 
 =================================
 
-アプリケーションディレクトリからの`tree`
+アプリケーションディレクトリからの`tree`  
 
-flask_app
-├── __init__.py
-├── main.py
-├── models.py
-├── routes
-│   ├── auth.py
-│   └── music.py
-└── templates
-    ├── index.html
-    ├── list.html
-    ├── recorder.html
-    └── register.html
+flask_app  
+├── __init__.py  
+├── main.py  
+├── models.py  
+├── routes  
+│   ├── auth.py  
+│   └── music.py  
+└── templates  
+    ├── index.html  
+    ├── list.html  
+    ├── recorder.html  
+    └── register.html  
 
-- `__init__.py`：必須モジュール、コンフィグ情報、DB初期化
+- `__init__.py`：必須モジュール、コンフィグ情報、DB初期化  
 
-- `main.py`：アプリケーションの起動
+- `main.py`：アプリケーションの起動  
 
-- `models.py`：DBクラスの定義
+- `models.py`：DBクラスの定義  
 
-- `routes/auth.py`：認証関連のエンドポイント
+- `routes/auth.py`：認証関連のエンドポイント  
 
-- `routes/music.py`：楽曲管理関連のエンドポイント
+- `routes/music.py`：楽曲管理関連のエンドポイント  
 
-- `templates/ hoge .html` :php版の命名規則に準拠
+- `templates/ hoge .html` :php版の命名規則に準拠  
