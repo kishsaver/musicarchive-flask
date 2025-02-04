@@ -5,10 +5,17 @@ musicarchive flask版
 
 DBはSQLite3を利用
 
+<<<<<<< HEAD
 - ライブラリのインストール
 `git clone`したリポジトリ内で`pip install -r requirements.txt`
 
 - Flaskアプリケーションの実行
+=======
+`pip install -r requirements.txt`
+
+でライブラリを入れたあと、
+
+>>>>>>> fd4973d7257898389fd4e13ab423f24030c701eb
 `python3 -m flask_app.main`
 
 =================================
