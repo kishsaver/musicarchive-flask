@@ -1,23 +1,26 @@
-version: '3.8'
-
 services:
-  av-db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: sampledb  
-      MYSQL_USER: user  
-      MYSQL_PASSWORD: password  
-    ports:
-      - "3306:3306"
-
-  av-flask:
+  flask-app:
     build: . 
     volumes:
       - ./flask_app:/flask_app
     ports: 
-      - "5000:5000"
+      - "80:5000"
     depends_on: 
-      - av-db
+      mysql-db:
     # DBが接続待機になるまで経過してから起動(暫定的対応, waitfor itを使うか、sqlite等に変えるか、db側を速くする)
     command: ["sh", "-c", "sleep 5 && flask run --host=0.0.0.0"]
+
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: musicarchive
+      MYSQL_USER: user  
+      MYSQL_PASSWORD: password  
+    #起動時実行sql
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    #initファイルの指定
+    command: --init-file=/docker-entrypoint-initdb.d/init.sql
