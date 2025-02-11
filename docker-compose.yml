@@ -6,7 +6,7 @@ services:
     ports: 
       - "80:5000"
     depends_on: 
-      mysql-db:
+      - mysql-db
     # DBが接続待機になるまで経過してから起動(暫定的対応, waitfor itを使うか、sqlite等に変えるか、db側を速くする)
     command: ["sh", "-c", "sleep 5 && flask run --host=0.0.0.0"]
 
