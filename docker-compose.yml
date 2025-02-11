@@ -4,7 +4,7 @@ services:
     volumes:
       - ./flask_app:/flask_app
     ports: 
-      - "80:5000"
+      - "80:80"
     depends_on: 
       - mysql-db
     # DBが接続待機になるまで経過してから起動(暫定的対応, waitfor itを使うか、sqlite等に変えるか、db側を速くする)
