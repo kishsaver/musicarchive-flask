@@ -13,7 +13,7 @@ def create_app():
     #セッション利用に秘密鍵が必要
     app.config['SECRET_KEY'] = 'dev'
     #ファイルアップロード関係
-    app.config['UPLOAD_FOLDER'] = './uploads'
+    app.config['UPLOAD_FOLDER'] = '/flask_app/uploads'
     app.config['ALLOWED_EXTENSIONS'] = '.mp3, .wav'
     db.init_app(app)
     #ルーティングファイルをエンドポイントとして登録

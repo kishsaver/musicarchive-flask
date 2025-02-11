@@ -61,6 +61,7 @@
                         <th>楽曲名</th>
                         <th>アーティスト名</th>
                         <th>適したシーン</th>
+                        <th>再生</th>
                     </tr>
                     {% for music in musics %}
                     <tr>
@@ -70,6 +71,7 @@
                         <td>{{ music.song_name }}</td>
                         <td>{{ music.artist_name }}</td>
                         <td>{{ music.category }}</td>
+                        <td><audio controls><source src="{{ url_for('music.uploaded_file', filename=music.music_file_path.split('/')[-1]) }}"></audio></td>
                     </tr>
                     {% endfor %}
                 </table>
