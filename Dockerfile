@@ -4,7 +4,7 @@ WORKDIR /flask_app
 
 # ホストのファイルをコンテナの/flask_appディレクトリにコピー
 COPY . .
-# ホストのrequirements.txtをコンテナのflask_appディレクトリにコピー
+# pythonパッケージのインストール
 RUN pip install -r requirements.txt
 
 # Flaskのデバッグモードを有効にする（Pythonやhtmlの変更がブラウザのリロードだけで反映される）

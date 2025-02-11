@@ -4,10 +4,11 @@ services:
     volumes:
       - ./flask_app:/flask_app
     ports: 
-      - "80:5000"
+      - "80:80"
     depends_on: 
-      mysql-db:
+      - mysql-db
     # DBが接続待機になるまで経過してから起動(暫定的対応, waitfor itを使うか、sqlite等に変えるか、db側を速くする)
+    # port80, 外向き対応（要FW）
     command: ["sh", "-c", "sleep 5 && flask run --host=0.0.0.0"]
 
   mysql-db:
