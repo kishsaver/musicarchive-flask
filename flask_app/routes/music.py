@@ -23,6 +23,8 @@ def recorder():
         song_name = request.form.get('song_name')
         artist_name = request.form.get('artist_name')
         category = request.form.get('category')
+        music_file = request.files('file')
+
 
         music = Music(
             song_name=song_name,
