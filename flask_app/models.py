@@ -30,4 +30,4 @@ class Music(db.Model):
     song_name = db.Column(db.String(100), nullable=False)
     artist_name = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(20), nullable=False)
-    music_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    music_user_id = db.Column(db.String(80), db.ForeignKey('users.user_id'), nullable=False)
