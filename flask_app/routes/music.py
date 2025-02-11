@@ -1,4 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+import os
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, send_from_directory
 from flask_app.models import db, Music
 from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
@@ -23,13 +24,16 @@ def recorder():
         song_name = request.form.get('song_name')
         artist_name = request.form.get('artist_name')
         category = request.form.get('category')
-        music_file = request.files('file')
-
+        music_file = request.files['music_file']
+    
+        file_path = os.path.join('uploads', music_file.filename)
+        music_file.save(file_path)
 
         music = Music(
             song_name=song_name,
             artist_name=artist_name,
             category=category,
+            music_file_path=file_path,
             music_user_id=session['user_id']
         )
 
