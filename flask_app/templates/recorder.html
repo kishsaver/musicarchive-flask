@@ -8,7 +8,7 @@
     <h2>楽曲の登録</h2>
 
     <!-- Flaskでのフラッシュメッセージを赤or青で表示(error、success)-->
-    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+   {% with messages = get_flashed_messages(category_filter=["error"]) %}
         {% if messages %}
             {% for message in messages %}
                 <p style="color: red;">{{ message }}</p>
@@ -24,13 +24,15 @@
         {% endif %}
     {% endwith %}
 
-    <!-- action先はmusic.recorderエンドポイントに向ける -->
-    <form method="POST" action="{{ url_for('music.recorder') }}">
+            <!-- action先はmusic.recorderエンドポイントに向ける -->
+    <form method="POST" action="{{ url_for('music.recorder') }}" enctype="multipart/form-data">
 
         <!-- PHP版にある「これまでに登録した楽曲を一覧表示する」ボタン相当 -->
         <button type="button" onclick="location.href='{{ url_for('music.list') }}'">
             これまでに登録した楽曲を一覧表示する
         </button><br><br>
+        楽曲ファイル:<br>
+        <input type="file" name="music_file" required><br><br>
 
         楽曲名:<br>
         <input type="text" name="song_name" required><br><br>
