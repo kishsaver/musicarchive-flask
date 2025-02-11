@@ -1,6 +1,13 @@
 # musicarchive-flask
 ## 25年度 システム構築講義 ハンズオン資料
 
+- ブランチについて
+`main` リリース版、どういう状況になってるかは不明
+
+`php_transplant` php版を単純に移植しただけ、機能の追加などなし  
+
+`その他`　かいはつちう
+
 musicarchive flask版  
 
 DBはSQLite3を利用  
