@@ -20,7 +20,7 @@ services:
       MYSQL_PASSWORD: password  
     #起動時実行sql
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - .conf/init:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
     #initファイルの指定
