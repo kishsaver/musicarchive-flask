@@ -32,7 +32,7 @@ class Music(db.Model):
     artist_name = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(20), nullable=False)
     bpm = db.Column(db.Integer, nullable=False)
-    music_file_path = db.Column(db.String(255), nullable=False)
+    file_name = db.Column(db.String(255), nullable=False)
     music_user_id = db.Column(db.String(80), db.ForeignKey('users.user_id'), nullable=False)
     playdata = db.relationship('MusicPlayData', backref='Music', lazy=True)
 
