@@ -1,6 +1,6 @@
 services:
   flask-app:
-    build: . 
+    build: ./python/ 
     volumes:
       - ./flask_app:/flask_app
     ports: 
@@ -12,7 +12,7 @@ services:
     command: ["sh", "-c", "sleep 5 && flask run --host=0.0.0.0 --port=80"]
 
   mysql-db:
-    image: mysql:8.0
+    build: ./mysql/
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: musicarchive
@@ -20,7 +20,8 @@ services:
       MYSQL_PASSWORD: password  
     #起動時実行sql
     volumes:
-      - ./init:/docker-entrypoint-initdb.d
+      - ./conf/mysql/initdb.d:/docker-entrypoint-initdb.d
+      - ./conf/mysql/conf.d:/etc/mysql/conf.d
     ports:
       - "3306:3306"
     #initファイルの指定

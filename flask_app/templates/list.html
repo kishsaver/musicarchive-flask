@@ -28,6 +28,24 @@
         function confirmDelete() {
             return confirm('選択した楽曲を削除してもよろしいですか？');
         }
+
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.addEventListener('play', function() {
+                const playTime = new Date().toISOString(); // 再生開始時刻
+                const audioSrc = this.querySelector('source').src; // 再生されたファイルのURL
+                const fileName = audioSrc.split('/').pop(); // ファイル名だけを取得
+
+                fetch('/log_play_time', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ play_time: playTime, file_name: fileName })
+                })
+                .then(response => response.json())
+                .then(data => console.log('ログ送信成功:', data))
+                .catch(error => console.error('エラー:', error))
+                ;
+            });
+        });
     </script>
 </head>
 <body>
@@ -61,6 +79,7 @@
                         <th>楽曲名</th>
                         <th>アーティスト名</th>
                         <th>適したシーン</th>
+                        <th>BPM</th>
                         <th>再生</th>
                     </tr>
                     {% for music in musics %}
@@ -71,7 +90,8 @@
                         <td>{{ music.song_name }}</td>
                         <td>{{ music.artist_name }}</td>
                         <td>{{ music.category }}</td>
-                        <td><audio controls><source src="{{ url_for('music.uploaded_file', filename=music.music_file_path.split('/')[-1]) }}"></audio></td>
+                        <td>{{ music.bpm }}</td>
+                        <td><audio controls><source src="{{ url_for('music.uploaded_file', file_name=music.file_name) }}"></audio></td>
                     </tr>
                     {% endfor %}
                 </table>
