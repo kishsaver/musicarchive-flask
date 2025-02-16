@@ -1,4 +1,6 @@
 import os
+import librosa
+import numpy as np
 from flask import current_app, Blueprint, render_template, request, redirect, url_for, flash, session, send_from_directory
 from flask_app.models import db, Music
 from functools import wraps
@@ -34,11 +36,14 @@ def recorder():
           filename=secure_filename(music_file.filename)
           file_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
           music_file.save(file_path)
+          y, sr = librosa.load(file_path)
+          bpm, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
 
         music = Music(
             song_name=song_name,
             artist_name=artist_name,
             category=category,
+            bpm=int(bpm[0]),
             music_file_path=file_path,
             music_user_id=session['user_id']
         )
