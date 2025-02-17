@@ -29,6 +29,32 @@
             return confirm('選択した楽曲を削除してもよろしいですか？');
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const audioElements = document.querySelectorAll("audio");
+    
+            audioElements.forEach(audio => {
+                audio.addEventListener("play", function() {
+                    const fileName = this.querySelector("source").src.split("/").pop(); // ファイル名取得
+                    const playTime = new Date().toISOString(); // 現在時刻を取得
+    
+                    fetch("{{ url_for('music.log_play_time') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            play_timedate: playTime,
+                            file_name: fileName
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log("Play logged:", data))
+                    .catch(error => console.error("Error logging play:", error));
+                });
+            });
+        });
+    </script>
 </head>
 <body>
     <h1>登録した楽曲の一覧</h1>
@@ -61,6 +87,7 @@
                         <th>楽曲名</th>
                         <th>アーティスト名</th>
                         <th>適したシーン</th>
+                        <th>BPM</th>
                         <th>再生</th>
                     </tr>
                     {% for music in musics %}
@@ -71,7 +98,8 @@
                         <td>{{ music.song_name }}</td>
                         <td>{{ music.artist_name }}</td>
                         <td>{{ music.category }}</td>
-                        <td><audio controls><source src="{{ url_for('music.uploaded_file', filename=music.music_file_path.split('/')[-1]) }}"></audio></td>
+                        <td>{{ music.bpm }}</td>
+                        <td><audio controls><source src="{{ url_for('music.uploaded_file', file_name=music.file_name) }}"></audio></td>
                     </tr>
                     {% endfor %}
                 </table>

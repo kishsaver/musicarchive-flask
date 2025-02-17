@@ -1,6 +1,8 @@
 services:
   flask-app:
     build: ./python/ 
+    environment:
+      TZ: Asia/Tokyo
     volumes:
       - ./flask_app:/flask_app
     ports: 
@@ -14,6 +16,7 @@ services:
   mysql-db:
     build: ./mysql/
     environment:
+      TZ: Asia/Tokyo
       MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: musicarchive
       MYSQL_USER: user  
