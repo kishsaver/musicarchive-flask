@@ -110,28 +110,34 @@ def uploaded_file(file_name):
 
 @music_bp.route('/log_play_time', methods=['POST'])
 def log_play_time():
-    """音楽ファイルの再生日時を取得するエンドポイント(JSON取得の実装例)"""
+    """音楽ファイルの再生日時を取得し、データベースに保存"""
     data = request.json
     play_timedate = data.get('play_timedate')
     file_name = data.get('file_name')
 
     if play_timedate and file_name:
-        play_datetime = datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
-      
-        log = MusicPlayData(
-                play_music_id = Music.query.filter_by(file_name=file_name).first().id,
-                play_user_id = session['user_id'],
-                play_datetime = play_datetime
-            )
-    
         try:
+            play_datetime = datetime.datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
+            music = Music.query.filter_by(file_name=file_name).first()
+            if not music:
+                return {"status": "error", "message": "Music file not found"}, 404
+
+            log = MusicPlayData(
+                play_music_id=music.id,
+                play_user_id=session['user_id'],
+                play_datetime=play_datetime
+            )
+
             db.session.add(log)
             db.session.commit()
 
-        except SQLAlchemyError:
+            return {"status": "success", "message": "Play time logged"}, 200
+
+        except SQLAlchemyError as e:
             db.session.rollback()
-            
-        finally:
-            db.session.close()
+            return {"status": "error", "message": f"Database error: {str(e)}"}, 500
+
+    return {"status": "error", "message": "Invalid data"}, 400
+
 
 
