@@ -21,6 +21,7 @@ def login_required(f):
     return decorated_function
 
 def allowed_file(filename):
+    """fileの拡張子チェック"""
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in current_app.config['ALLOWED_EXTENSIONS']
 
@@ -38,7 +39,7 @@ def recorder():
             file_name = secure_filename(music_file.filename)
             file_path = os.path.join(current_app.config['UPLOAD_FOLDER'],file_name)
             music_file.save(file_path)
-            y, sr = librosa.load(file_path)
+            y,sr = librosa.load(file_path, sr=22050)
             bpm, beat_frames = librosa.beat.beat_track(y=y, sr=sr)
 
             music = Music(
