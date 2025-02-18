@@ -1,6 +1,4 @@
-import os
-from flask import Flask, redirect, url_for, session
-from functools import wraps
+from flask import Flask
 # dbモデル
 from flask_app.models import db
 # ルーティングファイル
@@ -25,15 +23,6 @@ def create_app():
     app.register_blueprint(analysis_bp)
 
     return app
-
-def login_required(f):
-    """ログインを必須にする"""
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if 'user_id' not in session:
-            return redirect(url_for('auth.index'))
-        return f(*args, **kwargs)
-    return decorated_function
 
 app = create_app()
 

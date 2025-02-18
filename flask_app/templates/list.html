@@ -111,13 +111,22 @@
             {% else %}
                 <p>楽曲が1件も登録されていません</p>
             {% endif %}
-
+            <div class="button-group">
+                <button type="button" onclick="location.href='{{ url_for('music.recorder') }}'">
+                    楽曲の登録に戻る
+                </button>
+                <button type="button" onclick="location.href='{{ url_for('auth.logout') }}'">
+                    ログアウト
+                </button>
+            </div>
+        </form>
+        <div>
             <button onclick="getMLRecommendation()">機械学習でおすすめ</button>
             <p id="ml-recommendation-result"></p>
             
             <script>
                 function getMLRecommendation() {
-                    fetch("/recommend_ml")
+                    fetch("/analysis")
                         .then(response => response.json())
                         .then(data => {
                             if (data.message) {
@@ -130,16 +139,7 @@
                         .catch(error => console.error("Error:", error));
                 }
             </script>
-
-            <div class="button-group">
-                <button type="button" onclick="location.href='{{ url_for('music.recorder') }}'">
-                    楽曲の登録に戻る
-                </button>
-                <button type="button" onclick="location.href='{{ url_for('auth.logout') }}'">
-                    ログアウト
-                </button>
-            </div>
-        </form>
+        </div>
     </div>
 </body>
 </html>

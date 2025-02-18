@@ -3,13 +3,22 @@ import librosa
 import numpy as np
 from datetime import datetime
 from flask import current_app, Blueprint, render_template, request, redirect, url_for, flash, session, send_from_directory
-from flask_app import db, login_required
-from flask_app.models import Music, MusicPlayData
+from flask_app.models import db, Music, MusicPlayData
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
+from functools import wraps
 
 
 music_bp = Blueprint('music', __name__)
+
+def login_required(f):
+    """ログインを必須にする"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('auth.index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def allowed_file(filename):
     return '.' in filename and \
