@@ -4,12 +4,10 @@ from sklearn.cluster import KMeans
 from sklearn.ensemble import RandomForestClassifier
 from datetime import datetime
 from flask import Blueprint, session, jsonify, current_app
-from flask_app.models import db, User, Music, MusicPlayData
+from flask_app.models import db, Music, MusicPlayData
 from sqlalchemy.exc import SQLAlchemyError
 
 analysis_bp = Blueprint('analysis', __name__)
-
-from flask import current_app
 
 def get_play_history(user_id):
     current_app.logger.debug(f"Fetching play history for user_id: {user_id}")
@@ -21,32 +19,36 @@ def get_play_history(user_id):
             .filter(MusicPlayData.play_user_id == user_id)
             .all()
         )
-    except Exception as e:
+
+        current_app.logger.debug(f"Query result count: {len(play_data)}")
+
+        records = []
+        for play, music in play_data:
+            current_app.logger.debug(f"Found record: {play}, {music}")
+            records.append({
+                "play_datetime": play.play_datetime,
+                "hour": play.play_datetime.hour,
+                "category": music.category,
+                "bpm": music.bpm,
+                "song_name": music.song_name,
+                "artist_name": music.artist_name,
+                "file_name": music.file_name
+            })
+
+        current_app.logger.debug(f"Total records added: {len(records)}")
+
+        df = pd.DataFrame(records)
+        current_app.logger.debug("Generated DataFrame:")
+        current_app.logger.debug(df)
+
+        return df
+
+    except SQLAlchemyError as e:
         current_app.logger.error(f"Database error: {e}")
         return pd.DataFrame()
 
-    current_app.logger.debug(f"Query result count: {len(play_data)}")
-
-    records = []
-    for play, music in play_data:
-        current_app.logger.debug(f"Found record: {play}, {music}")
-        records.append({
-            "play_datetime": play.play_datetime,
-            "hour": play.play_datetime.hour,
-            "category": music.category,
-            "bpm": music.bpm,
-            "song_name": music.song_name,
-            "artist_name": music.artist_name,
-            "file_name": music.file_name
-        })
-
-    current_app.logger.debug(f"Total records added: {len(records)}")
-
-    df = pd.DataFrame(records)
-    current_app.logger.debug("Generated DataFrame:")
-    current_app.logger.debug(df)
-
-    return df
+    finally:
+        db.session.close()
 
 def preprocess_data(df):
     df["time_of_day"] = pd.cut(
