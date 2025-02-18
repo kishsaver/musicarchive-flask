@@ -21,8 +21,8 @@ auth_bp = Blueprint('auth', __name__)
 def index(): #本当はlogin等のが良いが、PHP版に準拠
     """ログイン処理"""
     if request.method == 'POST':
-        user_id = request.form.get('user_id')
-        password = request.form.get('password')
+        user_id: str = request.form.get('user_id')
+        password: str = request.form.get('password')
 
         try:
             #Userテーブルから、user_idが一致するレコードを取得
@@ -51,9 +51,9 @@ def index(): #本当はlogin等のが良いが、PHP版に準拠
 def register():
     """ユーザの新規登録"""
     if request.method == 'POST':
-        user_id = request.form.get('user_id')
-        password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        user_id: str = request.form.get('user_id')
+        password: str = request.form.get('password')
+        confirm_password: str = request.form.get('confirm_password')
         
         if confirm_password != password:
             flash('パスワードとパスワード（再入力）が一致しません', 'error')
