@@ -1,10 +1,12 @@
 import os
-from flask import Flask
+from flask import Flask, redirect, url_for, session
+from functools import wraps
 # dbモデル
 from flask_app.models import db
 # ルーティングファイル
 from flask_app.routes.auth import auth_bp
 from flask_app.routes.music import music_bp
+from flask_app.routes.analysis import analysis_bp
 
 def create_app():
     app = Flask(__name__, static_folder="./static") # Flaskのインスタンス生成、css/jsのフォルダ指定
@@ -20,8 +22,18 @@ def create_app():
     #ルーティングファイルをエンドポイントとして登録
     app.register_blueprint(auth_bp)
     app.register_blueprint(music_bp)
+    app.register_blueprint(analysis_bp)
 
     return app
+
+def login_required(f):
+    """ログインを必須にする"""
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect(url_for('auth.index'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 app = create_app()
 

@@ -112,6 +112,25 @@
                 <p>楽曲が1件も登録されていません</p>
             {% endif %}
 
+            <button onclick="getMLRecommendation()">機械学習でおすすめ</button>
+            <p id="ml-recommendation-result"></p>
+            
+            <script>
+                function getMLRecommendation() {
+                    fetch("/recommend_ml")
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                document.getElementById("ml-recommendation-result").innerText = data.message;
+                            } else {
+                                document.getElementById("ml-recommendation-result").innerHTML = 
+                                    `🎶 おすすめの曲: ${data.song_name} (${data.artist_name}) [BPM: ${data.bpm}]`;
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                }
+            </script>
+
             <div class="button-group">
                 <button type="button" onclick="location.href='{{ url_for('music.recorder') }}'">
                     楽曲の登録に戻る
