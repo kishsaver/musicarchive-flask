@@ -12,3 +12,5 @@ Flask-SQLAlchemy==3.1.1
 PyMySQL==1.1.1
 cryptography
 librosa
+scikit-learn
+pandas

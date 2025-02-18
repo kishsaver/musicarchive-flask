@@ -1,12 +1,12 @@
 import os
 import librosa
-import datetime
 import numpy as np
+from datetime import datetime
 from flask import current_app, Blueprint, render_template, request, redirect, url_for, flash, session, send_from_directory
-from flask_app.models import db, User, Music, MusicPlayData
-from functools import wraps
+from flask_app.models import db, Music, MusicPlayData
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.utils import secure_filename
+from functools import wraps
 
 
 music_bp = Blueprint('music', __name__)
@@ -116,7 +116,7 @@ def log_play_time():
 
     if play_timedate and file_name:
         try:
-            play_datetime = datetime.datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
+            play_datetime = datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
             music = Music.query.filter_by(file_name=file_name).first()
             if not music:
                 return {"status": "error", "message": "Music file not found"}, 404
