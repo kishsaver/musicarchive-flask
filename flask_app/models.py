@@ -11,7 +11,8 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
-    musics = db.relationship('Music', backref='user', lazy=True)
+    musics = db.relationship('Music', backref='User', lazy=True)
+    playdata = db.relationship('MusicPlayData', backref='User', lazy=True)
 
     # パスワードハッシュ系、ルーティングファイル側で実装も可
     def set_password(self, password):
@@ -30,4 +31,16 @@ class Music(db.Model):
     song_name = db.Column(db.String(100), nullable=False)
     artist_name = db.Column(db.String(100), nullable=False)
     category = db.Column(db.String(20), nullable=False)
+    bpm = db.Column(db.Integer, nullable=False)
+    file_name = db.Column(db.String(255), nullable=False)
     music_user_id = db.Column(db.String(80), db.ForeignKey('users.user_id'), nullable=False)
+    playdata = db.relationship('MusicPlayData', backref='Music', lazy=True)
+
+class MusicPlayData(db.Model):
+    """楽曲再生データ"""
+    __tablename__ = "playdata"
+    id = db.Column(db.Integer, primary_key=True)
+    play_music_id = db.Column(db.Integer, db.ForeignKey('musics.id'), nullable=False)
+    play_user_id = db.Column(db.String(80), db.ForeignKey('users.user_id'), nullable=False)
+    play_datetime = db.Column(db.DateTime, nullable=False)
+

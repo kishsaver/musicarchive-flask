@@ -28,6 +28,30 @@
         function confirmDelete() {
             return confirm('選択した楽曲を削除してもよろしいですか？');
         }
+  
+        document.addEventListener("DOMContentLoaded", function() {
+            const audioElements = document.querySelectorAll("audio");
+        
+            audioElements.forEach(audio => {
+                audio.addEventListener("play", function() {
+                    const musicId = Number(this.getAttribute("data-music-id")); // ✅ 直接取得
+                    const playTime = new Date().toISOString(); // 現在時刻を取得
+                    fetch("{{ url_for('music.log_play_time') }}", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            play_timedate: playTime,
+                            music_id: musicId  // ✅ 正しい music_id を送信
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => console.log("Play logged:", data))
+                    .catch(error => console.error("Error logging play:", error));
+                });
+            });
+        });
     </script>
 </head>
 <body>
@@ -61,6 +85,8 @@
                         <th>楽曲名</th>
                         <th>アーティスト名</th>
                         <th>適したシーン</th>
+                        <th>BPM</th>
+                        <th>再生</th>
                     </tr>
                     {% for music in musics %}
                     <tr>
@@ -70,6 +96,12 @@
                         <td>{{ music.song_name }}</td>
                         <td>{{ music.artist_name }}</td>
                         <td>{{ music.category }}</td>
+                        <td>{{ music.bpm }}</td>
+                        <td>
+                            <audio controls data-music-id="{{ music.id }}">
+                                <source src="{{ url_for('music.uploaded_file', file_name=music.file_name) }}" type="audio/mpeg">
+                            </audio>
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -81,7 +113,6 @@
             {% else %}
                 <p>楽曲が1件も登録されていません</p>
             {% endif %}
-
             <div class="button-group">
                 <button type="button" onclick="location.href='{{ url_for('music.recorder') }}'">
                     楽曲の登録に戻る
@@ -91,6 +122,26 @@
                 </button>
             </div>
         </form>
+        <div>
+            <button onclick="getMLRecommendation()">機械学習でおすすめ</button>
+            <p id="ml-recommendation-result"></p>
+            
+            <script>
+                function getMLRecommendation() {
+                    fetch("/analysis")
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.message) {
+                                document.getElementById("ml-recommendation-result").innerText = data.message;
+                            } else {
+                                document.getElementById("ml-recommendation-result").innerHTML = 
+                                    `🎶 おすすめの曲: ${data.song_name} (${data.artist_name}) [BPM: ${data.bpm}]`;
+                            }
+                        })
+                        .catch(error => console.error("Error:", error));
+                }
+            </script>
+        </div>
     </div>
 </body>
 </html>
