@@ -116,7 +116,7 @@ def log_play_time():
 
     if play_timedate and file_name:
         try:
-            play_datetime = datetime.datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
+            play_datetime = datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
             music = Music.query.filter_by(file_name=file_name).first()
             if not music:
                 return {"status": "error", "message": "Music file not found"}, 404
