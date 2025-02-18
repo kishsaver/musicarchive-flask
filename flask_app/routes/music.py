@@ -112,12 +112,13 @@ def log_play_time():
     """音楽ファイルの再生日時を取得し、データベースに保存"""
     data = request.json
     play_timedate = data.get('play_timedate')
-    file_name = data.get('file_name')
+    
+    music_id = data.get('music_id')
 
-    if play_timedate and file_name:
+    if play_timedate and music_id:
         try:
             play_datetime = datetime.strptime(play_timedate, "%Y-%m-%dT%H:%M:%S.%fZ")
-            music = Music.query.filter_by(file_name=file_name).first()
+            music = Music.query.filter_by(id=music_id).first()
             if not music:
                 return {"status": "error", "message": "Music file not found"}, 404
 

@@ -28,16 +28,14 @@
         function confirmDelete() {
             return confirm('選択した楽曲を削除してもよろしいですか？');
         }
-    </script>
-    <script>
+  
         document.addEventListener("DOMContentLoaded", function() {
             const audioElements = document.querySelectorAll("audio");
-    
+        
             audioElements.forEach(audio => {
                 audio.addEventListener("play", function() {
-                    const fileName = this.querySelector("source").src.split("/").pop(); // ファイル名取得
+                    const musicId = Number(this.getAttribute("data-music-id")); // ✅ 直接取得
                     const playTime = new Date().toISOString(); // 現在時刻を取得
-    
                     fetch("{{ url_for('music.log_play_time') }}", {
                         method: "POST",
                         headers: {
@@ -45,7 +43,7 @@
                         },
                         body: JSON.stringify({
                             play_timedate: playTime,
-                            file_name: fileName
+                            music_id: musicId  // ✅ 正しい music_id を送信
                         })
                     })
                     .then(response => response.json())
@@ -99,7 +97,11 @@
                         <td>{{ music.artist_name }}</td>
                         <td>{{ music.category }}</td>
                         <td>{{ music.bpm }}</td>
-                        <td><audio controls><source src="{{ url_for('music.uploaded_file', file_name=music.file_name) }}"></audio></td>
+                        <td>
+                            <audio controls data-music-id="{{ music.id }}">
+                                <source src="{{ url_for('music.uploaded_file', file_name=music.file_name) }}" type="audio/mpeg">
+                            </audio>
+                        </td>
                     </tr>
                     {% endfor %}
                 </table>
