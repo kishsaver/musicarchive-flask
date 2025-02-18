@@ -92,7 +92,6 @@ def list(): #listは組み込みの再定義になってしまうが、PHP版に
 
     try:
         musics = Music.query.filter_by(music_user_id=user_id).all()
-        
     
     except SQLAlchemyError as e:
         flash(f'データベースエラーが発生しました: {str(e)}', 'error')
