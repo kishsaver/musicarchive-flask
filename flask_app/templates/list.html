@@ -34,7 +34,7 @@
         
             audioElements.forEach(audio => {
                 audio.addEventListener("play", function() {
-                    const musicId = Number(this.getAttribute("data-music-id")); // ✅ 直接取得
+                    const musicId = Number(this.getAttribute("data-music-id")); // 直接取得
                     const playTime = new Date().toISOString(); // 現在時刻を取得
                     fetch("{{ url_for('music.log_play_time') }}", {
                         method: "POST",
@@ -43,7 +43,7 @@
                         },
                         body: JSON.stringify({
                             play_timedate: playTime,
-                            music_id: musicId  // ✅ 正しい music_id を送信
+                            music_id: musicId  // 正しい music_id を送信
                         })
                     })
                     .then(response => response.json())
@@ -123,7 +123,7 @@
             </div>
         </form>
         <div>
-            <button onclick="getMLRecommendation()">機械学習でおすすめ</button>
+            <button onclick="getMLRecommendation()">現在時刻に適した楽曲を推薦</button>
             <p id="ml-recommendation-result"></p>
             
             <script>
@@ -135,7 +135,7 @@
                                 document.getElementById("ml-recommendation-result").innerText = data.message;
                             } else {
                                 document.getElementById("ml-recommendation-result").innerHTML = 
-                                    `🎶 おすすめの曲: ${data.song_name} (${data.artist_name}) [BPM: ${data.bpm}]`;
+                                    `おすすめの曲: ${data.song_name} (${data.artist_name}) [BPM: ${data.bpm}]`;
                             }
                         })
                         .catch(error => console.error("Error:", error));

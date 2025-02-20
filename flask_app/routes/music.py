@@ -50,7 +50,7 @@ def recorder() -> str:
                 song_name=song_name,
                 artist_name=artist_name,
                 category=category,
-                bpm=int(bpm),
+                bpm=int(bpm[0]),
                 file_name=file_name,
                 music_user_id=session['user_id']
             )
